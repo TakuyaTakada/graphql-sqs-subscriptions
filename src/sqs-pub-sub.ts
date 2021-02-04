@@ -14,19 +14,35 @@ export class SQSPubSub implements PubSubEngine {
   private stopped: boolean;
   private triggerName: string;
 
-  public constructor(config: SQS.Types.ClientConfiguration = {}) {
+  public constructor(
+    config: SQS.Types.ClientConfiguration = {},
+    queueUrl: string | null = null
+  ) {
     aws.config.update(config);
 
     this.sqs = new aws.SQS({ apiVersion: AWS_SDK_API_VERSION });
+    if (queueUrl) {
+      this.createQueue(queueUrl)
+        .then(() => {
+          this.queueUrl = queueUrl;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
   }
 
   public asyncIterator = <T>(triggers: string | string[]): AsyncIterator<T> => {
     return new PubSubAsyncIterator<T>(this, triggers);
   };
 
-  public createQueue = async (): Promise<void> => {
+  public createQueue = async (
+    queueUrl: string | null = null
+  ): Promise<void> => {
     const params = {
-      QueueName: `${process.env.NODE_ENV || "local"}-${uuid()}.fifo`,
+      QueueName: queueUrl
+        ? queueUrl
+        : `${process.env.NODE_ENV || "local"}-${uuid()}.fifo`,
       Attributes: {
         FifoQueue: "true"
       }
