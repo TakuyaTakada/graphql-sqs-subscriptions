@@ -47,6 +47,8 @@ class SQSPubSub {
             }
         });
         this.deleteQueue = () => __awaiter(this, void 0, void 0, function* () {
+            if (this.isNoDeleteQueue)
+                return;
             const params = {
                 QueueUrl: this.queueUrl
             };
@@ -159,6 +161,7 @@ class SQSPubSub {
                 .catch(err => {
                 console.error(err);
             });
+            this.isNoDeleteQueue = true;
         }
     }
 }

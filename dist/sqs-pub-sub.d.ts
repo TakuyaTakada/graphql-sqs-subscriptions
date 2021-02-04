@@ -5,6 +5,7 @@ export declare class SQSPubSub implements PubSubEngine {
     private queueUrl;
     private stopped;
     private triggerName;
+    private isNoDeleteQueue;
     constructor(config?: SQS.Types.ClientConfiguration, queueUrl?: string | null);
     asyncIterator: <T>(triggers: string | string[]) => AsyncIterator<T, any, undefined>;
     createQueue: (queueUrl?: string) => Promise<void>;

@@ -13,6 +13,7 @@ export class SQSPubSub implements PubSubEngine {
   private queueUrl: string;
   private stopped: boolean;
   private triggerName: string;
+  private isNoDeleteQueue: boolean;
 
   public constructor(
     config: SQS.Types.ClientConfiguration = {},
@@ -29,6 +30,7 @@ export class SQSPubSub implements PubSubEngine {
         .catch(err => {
           console.error(err);
         });
+      this.isNoDeleteQueue = true;
     }
   }
 
@@ -67,6 +69,7 @@ export class SQSPubSub implements PubSubEngine {
   };
 
   public deleteQueue = async (): Promise<void> => {
+    if (this.isNoDeleteQueue) return;
     const params = {
       QueueUrl: this.queueUrl
     };
