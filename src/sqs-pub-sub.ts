@@ -144,8 +144,6 @@ export class SQSPubSub implements PubSubEngine {
       } catch (error) {
         console.error(error);
       }
-
-      this.stopped = false;
     }
   };
 

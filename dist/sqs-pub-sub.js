@@ -114,7 +114,6 @@ class SQSPubSub {
                 catch (error) {
                     console.error(error);
                 }
-                this.stopped = false;
             }
         });
         this.poll = (triggerName, onMessage) => __awaiter(this, void 0, void 0, function* () {
